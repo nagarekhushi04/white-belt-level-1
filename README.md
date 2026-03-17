@@ -1,7 +1,8 @@
 ## Stellar Pay – Simple Payment + Soroban Counter dApp
 
 Send XLM and interact with an **on-chain counter** on **Stellar Testnet** (Freighter + xBull supported).
-
+## vercel deployment 
+https://vercel.com/khushinagare04-5573s-projects/white-belt-level-1
 ### Project description
 Stellar Pay is a simple decentralized app for Stellar Testnet that lets you:
 

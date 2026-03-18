@@ -1,95 +1,97 @@
-## Stellar Pay – Simple Payment + Soroban Counter dApp
+# 🌟 Stellar Pay – Simple Payment & Counter dApp
 
-Send XLM and interact with an **on-chain counter** on **Stellar Testnet** (Freighter + xBull supported).
-## vercel deployment 
-https://vercel.com/khushinagare04-5573s-projects/white-belt-level-1
-### Project description
-Stellar Pay is a simple decentralized app for Stellar Testnet that lets you:
+[![Network: Stellar Testnet](https://img.shields.io/badge/Network-Stellar%20Testnet-blue.svg)](https://stellar.expert/explorer/testnet)
+[![Tech Stack: React + Vite](https://img.shields.io/badge/Stack-React%20%2B%20Vite-61DAFB.svg)](https://vitejs.dev/)
+[![Styling: Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS-38B2AC.svg)](https://tailwindcss.com/)
+[![Deployment: Vercel](https://img.shields.io/badge/Deployment-Vercel-black.svg)](https://white-belt-level-1-khushinagare04-5573s-projects.vercel.app/)
 
-- Connect a wallet (Freighter / xBull)
-- View your native XLM balance + fund via Friendbot
-- Send XLM to another Stellar address
-- Call a Soroban contract counter (`get_count`, `increment`, `reset`) and see events + tx status
+**Stellar Pay** is a high-performance, decentralized payment application built for the **Stellar Testnet**. It provides a sleek, modern interface for managing testnet funds and interacting with on-chain Soroban smart contracts.
 
-### Screenshots
-- Wallet connected:
-  - `screenshots/wallet connected state and balance displayed.png.png`
-- Successful transaction:
-  - `screenshots/successful testnet transaction.png.png`
-- Transaction result:
-  - `screenshots/transaction result.png.png`
+---
 
-## Project structure
-- `/src`: Main Stellar Pay dApp source code and core components.
-- `/contract`: Soroban smart contract source code (Rust).
-- `/crypto-portfolio`: A separate Ethereum-based portfolio tracker dApp using ethers.js.
-- `/stellar-payment-dapp`: A specialized implementation of the Stellar payment flow.
-- `/scripts`: Deployment and automation scripts for Soroban contracts.
-
-## Component overview (Main App)
-- **WalletCard.jsx**: Manages secure connection to Stellar wallets (Freighter, xBull) and handles XLM friendbot funding.
-- **ContractCard.jsx**: The primary interface for the Soroban counter contract, supporting fetching state, incrementing, and resetting features.
-- **SendForm.jsx**: A validated form for sending XLM with memo support and real-time fee status.
-- **EventFeed.jsx**: A live listener component that displays real-time Soroban events as they occur on-chain.
-- **TxStatusTracker.jsx**: Provides visual feedback for transaction lifecycles—pending, confirmed, or failed—with links to Stellar Expert.
-- **ErrorToast.jsx**: A global notification system for user-friendly error reporting across the application.
-- **Header.jsx**: Responsive navigation bar displaying network status and live wallet balance indicators.
-- **StatusBanner.jsx**: Contextual banner for quick transaction success/failure results.
+### 🌐 Vercel Deployment 
+[View Live Site](https://white-belt-level-1-khushinagare04-5573s-projects.vercel.app/)
 
 
-## Tech stack
+---
+
+## 🖼️ App Screenshot
+
+![Stellar Pay dApp](./screenshots/dapp_main_screenshot.png)
+*Modern, dark-themed UI with real-time balance tracking and contract interaction.*
+
+---
+
+## 🔗 Deployed Smart Contract
+
+**Soroban Counter Contract:**
+[`CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY`](https://stellar.expert/explorer/testnet/contract/CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY)
+
+---
+
+## 🚀 Key Features
+
+- **Multi-Wallet Support** – Connect seamlessly with **Freighter**, **xBull (Extension)**, or **xBull (Web)**.
+- **Instant Faucet** – One-click funding via **Friendbot** (10,000 test XLM).
+- **Smooth Payments** – Send XLM to any Stellar address with real-time validation and fee calculation.
+- **On-Chain Counter** – Interact with a Soroban smart contract to `increment` and `reset` a global state.
+- **Live Event Feed** – Watch contract events happen in real-time with our built-in event listener.
+- **Dark Mode Aesthetics** – Sleek, low-light design optimized for developers.
+
+---
+
+## 🛠️ Tech Stack
+
 - **Frontend**: React 18 + Vite 5
-- **Styling**: Tailwind CSS
-- **Stellar**: `@stellar/stellar-sdk` (Horizon + Soroban RPC)
+- **Styling**: Tailwind CSS 3
+- **Blockchain**: `@stellar/stellar-sdk` (Horizon + Soroban RPC)
 - **Wallets**: `@stellar/freighter-api`, `@creit.tech/stellar-wallets-kit`, `@creit.tech/xbull-wallet-connect`
 - **Tests**: Vitest + Testing Library
 
-## Setup (local)
-Install deps:
+---
 
+## ⚙️ Local Development
+
+### 1. Install Dependencies
 ```bash
 npm install
 ```
+*Note: If `npm install` fails due to dependency conflicts, use `npm install --ignore-scripts`.*
 
-Windows note: if `npm install` fails due to a dependency calling `yarn`, use:
-
-```bash
-npm install --ignore-scripts
+### 2. Configure Environment
+Create a `.env` file in the root:
+```env
+VITE_CONTRACT_ID=CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY
+VITE_NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
+VITE_RPC_URL=https://soroban-testnet.stellar.org
+VITE_HORIZON_URL=https://horizon-testnet.stellar.org
 ```
 
-Create env file:
-- Copy `.env.example` → `.env`
-- Set `VITE_CONTRACT_ID` after deploying your contract
-
-Run:
-
+### 3. Run Development Server
 ```bash
 npm run dev
 ```
 
-## Run tests
+---
 
+## 🧪 Testing
+
+Run unit and component tests:
 ```bash
 npm test
 ```
 
-## Deploy Soroban contract (testnet, Windows)
-You need a **funded testnet secret key**.
+---
 
-```powershell
-$env:STELLAR_SECRET_KEY="S................................................"
-.\scripts\deploy-testnet.ps1
-```
+## 📁 Project Structure
 
-This will deploy and write `.env` with `VITE_CONTRACT_ID=...`.
+- **/src**: Main Stellar Pay dApp source code and core components.
+- **/contract**: Soroban smart contract source code (Rust).
+- **/crypto-portfolio**: A separate Ethereum-based portfolio tracker dApp using ethers.js.
+- **/stellar-payment-dapp**: A specialized implementation of the Stellar payment flow.
+- **/scripts**: Deployment and automation scripts for Soroban contracts.
 
-## Environment variables
-See `.env.example`:
-- `VITE_CONTRACT_ID`: Soroban contract ID on Testnet
-- `VITE_RPC_URL`: Soroban RPC endpoint (default: testnet)
-- `VITE_HORIZON_URL`: Horizon endpoint (default: testnet)
-- `VITE_NETWORK_PASSPHRASE`: network passphrase (default: testnet)
+---
 
-## Known limitations / future improvements
-- Add an in-app “RPC down” banner when Soroban RPC polling fails (currently silent).
-- Add more component tests around wallet connect flows (requires mocking extensions).
+*Built with ❤️ on Stellar Testnet · Not for use with real XLM funds.*
+

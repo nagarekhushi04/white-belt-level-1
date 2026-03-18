@@ -1,90 +1,98 @@
-# Stellar Pay – Simple Payment dApp
+# 🌟 Stellar Pay – Simple Payment & Counter dApp
 
-Send XLM on Stellar Testnet using your Freighter wallet — fast, simple, and fee-light.
+[![Network: Stellar Testnet](https://img.shields.io/badge/Network-Stellar%20Testnet-blue.svg)](https://stellar.expert/explorer/testnet)
+[![Tech Stack: React + Vite](https://img.shields.io/badge/Stack-React%20%2B%20Vite-61DAFB.svg)](https://vitejs.dev/)
+[![Styling: Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS-38B2AC.svg)](https://tailwindcss.com/)
 
-### � Project Description
-Stellar Pay is a simple, decentralized payment application built to interact with the Stellar Testnet. It acts as an intuitive web interface for users to effortlessly manage their testnet funds. Once connected to a Freighter wallet, users can view their current native XLM balances, fund their newly created accounts with Friendbot, and seamlessly send test XLM to other Stellar addresses with real-time transaction tracking.
+**Stellar Pay** is a high-performance, decentralized payment application built for the **Stellar Testnet**. It provides a sleek, modern interface for managing testnet funds and interacting with on-chain Soroban smart contracts.
 
-[Stellar Pay Live](https://your-deployment-url.vercel.app)
-### Wallet Connected State and Balance Displayed
-![Wallet Connected](<wallet connected state and balance displayed.png>)
-> The Freighter wallet is successfully connected and the truncated public key is shown.
-### Successful Testnet Transaction
-![Successful Transaction](<successful testnet transaction.png>)
-> Screenshot demonstrating a populated form to send a transaction. 
-### Transaction Result
-![Transaction Result](<transaction result.png>)
-> Shows the success banner with a link to the Stellar explorer hash.
+---
 
-### 🛠 Tech Stack
+## 🖼️ App Screenshot
 
-| Layer | Technology |
-| --- | --- |
-| *Frontend* | React 18 + Vite 5 |
-| *Styling* | Tailwind CSS 3 |
-| *Stellar SDK* | @stellar/stellar-sdk v12 |
-| *Wallet* | @stellar/freighter-api v2 |
-| *Network* | Stellar Testnet (Horizon) |
+![Stellar Pay dApp](../screenshots/dapp_main_screenshot.png)
+*Modern, dark-themed UI with real-time balance tracking and contract interaction.*
 
-### ⚙️ Setup Instructions (How to run locally)
+---
 
-1. *Clone the repository*:
-   ```bash
-   git clone https://github.com/nagarekhushi04/white-belt-level-1.git
-   cd white-belt-level-1
-   ```
+## 🔗 Deployed Smart Contract
 
-2. *Install dependencies*:
-   ```bash
-   npm install
-   ```
+**Soroban Counter Contract:**
+[`CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY`](https://stellar.expert/explorer/testnet/contract/CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY)
 
-3. *Start the development server*:
-   ```bash
-   npm run dev
-   ```
+---
 
-4. *Open in browser*:
-   Navigate to http://localhost:5173 in your browser.
+## 🚀 Key Features
 
-### 🧪 How to Test
-1. *Install Freighter* – download from [freighter.io](https://www.freighter.io) (Chrome / Brave extension)
-2. *Switch to Testnet* – open Freighter → Settings → Network → select Test Network
-3. *Use Friendbot* – click 💧 *Fund with Friendbot* to receive 10,000 test XLM
-4. *Send XLM* – paste any testnet address, enter an amount, add an optional memo, click 🚀 *Send XLM*
-5. *View on Explorer* – after a successful transaction, click the hash link to view it on stellar.expert
+- **Multi-Wallet Support** – Connect seamlessly with **Freighter**, **xBull (Extension)**, or **xBull (Web)**.
+- **Instant Faucet** – One-click funding via **Friendbot** (10,000 test XLM).
+- **Smooth Payments** – Send XLM to any Stellar address with real-time validation and fee calculation.
+- **On-Chain Counter** – Interact with a Soroban smart contract to `increment` and `reset` a global state.
+- **Live Event Feed** – Watch contract events happen in real-time with our built-in event listener.
+- **Dark Mode Aesthetics** – Sleek, low-light design optimized for developers.
 
-## ✅ Level 1 Checklist
-- [x] React + Vite project scaffold
-- [x] Tailwind CSS dark theme (#0f0f1a background)
-- [x] Header with brand, Testnet badge, and wallet slot
-- [x] useWallet hook (connect / disconnect via Freighter)
-- [x] WalletCard – shows truncated public key + balance
-- [x] useBalance hook – auto-fetches XLM balance
-- [x] Friendbot faucet button with toast feedback
-- [x] SendForm – recipient / amount / memo fields with validation
-- [x] Full transaction flow: build → sign (Freighter) → submit (Horizon)
-- [x] StatusBanner – success hash link + user-friendly error messages
-- [x] Responsive mobile layout
-- [x] Footer: "Built on Stellar Testnet · Not for real funds"
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology | Description |
+| :--- | :--- | :--- |
+| **Frontend** | [React 18](https://react.dev/) | Component-based UI library |
+| **Build Tool** | [Vite 5](https://vitejs.dev/) | Ultra-fast frontend tooling |
+| **Styling** | [Tailwind CSS 3](https://tailwindcss.com/) | Utility-first CSS framework |
+| **Blockchain** | [@stellar/stellar-sdk](https://github.com/stellar/js-stellar-sdk) | Interaction with Horizon & Soroban RPC |
+| **Wallet** | [@stellar/freighter-api](https://www.freighter.io/) | Wallet integration via browser extensions |
+
+---
+
+## ⚙️ Local Development
+
+### 1. Clone & Install
+```bash
+git clone https://github.com/nagarekhushi04/white-belt-level-1.git
+cd white-belt-level-1
+npm install
+```
+
+### 2. Configure Environment
+Create a `.env` file in the root (if not already present):
+```env
+VITE_CONTRACT_ID=CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY
+VITE_NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
+VITE_RPC_URL=https://soroban-testnet.stellar.org
+VITE_HORIZON_URL=https://horizon-testnet.stellar.org
+```
+
+### 3. Launch App
+```bash
+npm run dev
+```
+Navigate to [http://localhost:5173](http://localhost:5173).
+
+---
+
+## 🧪 Testing the dApp
+
+1. **Setup Wallet**: Install the [Freighter](https://www.freighter.io) extension and switch to **Test Network**.
+2. **Fund Wallet**: Click the 💧 **Fund with Friendbot** button to receive test tokens.
+3. **Send XLM**: Paste a recipient address and send a small amount.
+4. **Interact with Counter**: Click **Increment** to see our Soroban contract update on-chain.
+5. **Verify**: Click the transaction hash to view the proof on [Stellar.expert](https://stellar.expert).
+
+---
 
 ## 📁 Project Structure
+
 ```text
 src/
-  components/
-    Header.jsx        # App shell header
-    WalletCard.jsx    # Wallet connect/balance UI
-    SendForm.jsx      # XLM payment form
-    StatusBanner.jsx  # Success/error transaction banner
-  hooks/
-    useWallet.js      # Freighter connect/disconnect state
-    useBalance.js     # XLM balance fetch + refresh
-  utils/
-    stellar.js        # fetchBalance, fundWithFriendbot, sendXLM, isValidStellarAddress
-  App.jsx             # Root component
-  main.jsx            # React DOM entry
-  index.css           # Global styles + Tailwind
+├── components/       # UI Components (Header, WalletCard, SendForm, etc.)
+├── hooks/            # Custom hooks for wallet management & balance fetching
+├── utils/            # Stellar SDK helpers & blockchain logic
+├── App.jsx           # Main application entry point
+└── index.css         # Global styles & Tailwind entry
 ```
 
 ---
-White Belt – Level 1 · Stellar Payment dApp
+
+*Built with ❤️ on Stellar Testnet · Not for use with real XLM funds.*
+

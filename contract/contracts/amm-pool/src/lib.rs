@@ -81,8 +81,38 @@ impl AMMPool {
     }
 
     pub fn get_reserves(env: Env) -> (u128, u128) {
-        let res_a: u128 = env.storage().instance().get(&DataKey::ReserveA).unwrap();
-        let res_b: u128 = env.storage().instance().get(&DataKey::ReserveB).unwrap();
+        let res_a: u128 = env.storage().instance().get(&DataKey::ReserveA).unwrap_or(0);
+        let res_b: u128 = env.storage().instance().get(&DataKey::ReserveB).unwrap_or(0);
         (res_a, res_b)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use soroban_sdk::testutils::Address as _;
+
+    #[test]
+    fn test_swap() {
+        let env = Env::default();
+        let contract_id = env.register_contract(None, AMMPool);
+        let client = AMMPoolClient::new(&env, &contract_id);
+
+        let factory = Address::generate(&env);
+        let asset_a = Address::generate(&env);
+        let asset_b = Address::generate(&env);
+        let user = Address::generate(&env);
+
+        client.init(&factory, &asset_a, &asset_b);
+        client.add_liquidity(&user, &1000u128, &500u128);
+
+        // Swap 100 A -> B
+        // output = (500 * 100) / (1000 + 100) = 50000 / 1100 = 45.45
+        let output = client.swap_a_to_b(&user, &100u128);
+        assert_eq!(output, 45);
+
+        let (res_a, res_b) = client.get_reserves();
+        assert_eq!(res_a, 1100);
+        assert_eq!(res_b, 500 - 45);
     }
 }

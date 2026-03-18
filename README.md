@@ -28,6 +28,14 @@
 
 ---
 
+## 📱 Mobile Responsiveness Review
+The application has been audited for mobile responsiveness:
+- **Breakpoint 375px (iPhone SE)**: Fully functional, vertical stacking of all glassmorphic components.
+- **Breakpoint 768px (iPad)**: Dual-column adaptive layout for enhanced usability.
+- **Touch-Targets**: Buttons and inputs use a minimum 44px height for optimal reachability.
+
+---
+
 ## 🔗 Deployed Smart Contract
 
 **Soroban Counter Contract:**

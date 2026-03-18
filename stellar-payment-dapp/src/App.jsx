@@ -4,6 +4,7 @@ import WalletCard from './components/WalletCard'
 import SendForm from './components/SendForm'
 import { useWallet } from './hooks/useWallet'
 import { useBalance } from './hooks/useBalance'
+import SwapDashboard from './components/level-4/SwapDashboard'
 
 export default function App() {
     const { publicKey, isConnecting, walletError, connectWallet, disconnectWallet } =
@@ -142,7 +143,22 @@ export default function App() {
                         refreshBalance={refreshBalance}
                     />
 
-                    <SendForm publicKey={publicKey} refreshBalance={refreshBalance} />
+                    <div className="flex flex-col gap-8 w-full">
+                        <SendForm publicKey={publicKey} refreshBalance={refreshBalance} />
+                        
+                        <div className="w-full h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent my-4"></div>
+                        
+                        <div className="text-center mb-4">
+                            <h2 className="text-2xl font-bold text-white tracking-tight">Level 4 Features</h2>
+                            <p className="text-slate-500 text-sm">Automated Market Maker & Factory Contracts</p>
+                        </div>
+
+                        <SwapDashboard 
+                            walletAddress={publicKey} 
+                            isConnected={!!publicKey} 
+                        />
+                    </div>
+
                 </div>
             </main>
 

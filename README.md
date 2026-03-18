@@ -7,6 +7,12 @@
 
 **Stellar Pay** is a high-performance, decentralized payment application built for the **Stellar Testnet**. It provides a sleek, modern interface for managing testnet funds and interacting with on-chain Soroban smart contracts.
 
+### 🏆 Level 4 Graduation Features
+- **Factory Contract Architecture** – Deploys and manages specialized swap pools.
+- **Constant Product AMM** – Automated swaps ($x \cdot y = k$) with safe fixed-point math.
+- **CI/CD Pipeline** – Full GitHub Actions coverage for linting, testing, and builds.
+- **Mobile-Responsive DEX UI** – A premium swap interface optimized for all devices.
+
 ---
 
 ### 🌐 Vercel Deployment 

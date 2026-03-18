@@ -10,6 +10,7 @@ import { useWallet } from './hooks/useWallet'
 import { useBalance } from './hooks/useBalance'
 import { useTxStatus } from './hooks/useTxStatus'
 import { useContractEvents } from './hooks/useContractEvents'
+import SwapDashboard from './components/level-4/SwapDashboard'
 
 export default function App() {
     const [globalError, setGlobalError] = useState(null)
@@ -238,6 +239,18 @@ export default function App() {
                     />
 
                     <EventFeed events={events} />
+
+                    <div className="w-full h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent my-8"></div>
+                        
+                    <div className="text-center mb-6">
+                        <h2 className="text-2xl font-bold text-white tracking-tight">Level 4 Features</h2>
+                        <p className="text-slate-500 text-sm">Automated Market Maker & Factory Contracts</p>
+                    </div>
+
+                    <SwapDashboard 
+                        walletAddress={publicKey} 
+                        isConnected={!!publicKey} 
+                    />
                 </div>
             </main>
 

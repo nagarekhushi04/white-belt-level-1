@@ -13,7 +13,7 @@ function safeNative(scVal) {
         // In v12, scValToNative is top-level or under SorobanRpc
         const converter = scValToNative || (SorobanRpc && SorobanRpc.scValToNative);
         if (!converter) throw new Error("scValToNative not found in SDK");
-        
+
         const val = converter(scVal);
         // React cannot render BigInts directly, so we convert them to strings/numbers
         if (typeof val === 'bigint') {
@@ -43,7 +43,7 @@ export async function getCount() {
             .build();
 
         const result = await rpcServer.simulateTransaction(tx);
-        
+
         if (SorobanRpc.Api.isSimulationError(result)) {
             console.error("FULL SIM ERROR (getCount):", JSON.stringify(result, null, 2));
             if (JSON.stringify(result).includes("HostError: Error(Storage, MissingValue)")) {
@@ -97,7 +97,7 @@ export async function buildIncrementTx(publicKey) {
 
     const account = await server.loadAccount(publicKey);
     const contract = new Contract(CONTRACT_ID);
-    
+
     // In v12, we can use nativeToScVal or just pass the address directly to let the SDK handle it.
     // However, some RPCs prefer explicit ScVal conversion.
     const userScVal = new Address(publicKey).toScVal();
@@ -115,17 +115,17 @@ export async function buildIncrementTx(publicKey) {
         const preparedTx = await rpcServer.prepareTransaction(tx);
         return preparedTx.toXDR();
     } catch (err) {
-         console.warn("prepareTransaction failed, checking simulation...", err.message);
-         // Try to simulate to get the exact error payload if prepare fails
-         const sim = await rpcServer.simulateTransaction(tx);
-         if (SorobanRpc.Api.isSimulationError(sim)) {
-             const simError = JSON.stringify(sim, null, 2);
-             console.error("FULL SIM ERROR (increment):", simError);
-             if (simError.includes("HostError: Error(Storage, MissingValue)")) {
-                 throw new Error("Contract not found — needs redeployment");
-             }
-         }
-         throw err;
+        console.warn("prepareTransaction failed, checking simulation...", err.message);
+        // Try to simulate to get the exact error payload if prepare fails
+        const sim = await rpcServer.simulateTransaction(tx);
+        if (SorobanRpc.Api.isSimulationError(sim)) {
+            const simError = JSON.stringify(sim, null, 2);
+            console.error("FULL SIM ERROR (increment):", simError);
+            if (simError.includes("HostError: Error(Storage, MissingValue)")) {
+                throw new Error("Contract not found — needs redeployment");
+            }
+        }
+        throw err;
     }
 }
 
@@ -151,16 +151,16 @@ export async function buildResetTx(publicKey) {
         const preparedTx = await rpcServer.prepareTransaction(tx);
         return preparedTx.toXDR();
     } catch (err) {
-         console.warn("prepareTransaction failed, checking simulation...", err.message);
-         const sim = await rpcServer.simulateTransaction(tx);
-         if (SorobanRpc.Api.isSimulationError(sim)) {
-             const simError = JSON.stringify(sim, null, 2);
-             console.error("FULL SIM ERROR (reset):", simError);
-             if (simError.includes("HostError: Error(Storage, MissingValue)")) {
-                 throw new Error("Contract not found — needs redeployment");
-             }
-         }
-         throw err;
+        console.warn("prepareTransaction failed, checking simulation...", err.message);
+        const sim = await rpcServer.simulateTransaction(tx);
+        if (SorobanRpc.Api.isSimulationError(sim)) {
+            const simError = JSON.stringify(sim, null, 2);
+            console.error("FULL SIM ERROR (reset):", simError);
+            if (simError.includes("HostError: Error(Storage, MissingValue)")) {
+                throw new Error("Contract not found — needs redeployment");
+            }
+        }
+        throw err;
     }
 }
 
@@ -168,12 +168,12 @@ export async function buildResetTx(publicKey) {
 export async function submitSignedTx(signedXDR) {
     const tx = TransactionBuilder.fromXDR(signedXDR, NETWORK_PASSPHRASE);
     const result = await rpcServer.sendTransaction(tx);
-    
+
     // v12 sendTransaction status check
     if (result.status === "ERROR") {
         throw new Error(`RPC Submission error: ${JSON.stringify(result.errorResultXdr || result)}`);
     }
-    
+
     return result; // { hash, status }
 }
 
@@ -183,21 +183,40 @@ export async function pollTxStatus(hash) {
     const maxAttempts = 30;
 
     while (attempts < maxAttempts) {
-        const response = await rpcServer.getTransaction(hash);
+        try {
+            const response = await rpcServer.getTransaction(hash);
 
-        // Handle v12 Soroban response format
-        if (response.status === "SUCCESS") {
-            return response;
-        } else if (response.status === "FAILED") {
-            const errorMsg = response.resultXdr ? "Transaction failed on chain" : "Transaction failed (unknown reason)";
-            throw new Error(errorMsg);
-        } else if (response.status === "NOT_FOUND") {
-            await new Promise(r => setTimeout(r, 1500));
-            attempts++;
-        } else {
-            // Processing/PENDING
-            await new Promise(r => setTimeout(r, 1000));
-            attempts++;
+            // Handle v12 Soroban response format
+            if (response.status === "SUCCESS") {
+                return response;
+            } else if (response.status === "FAILED") {
+                const errorMsg = response.resultXdr ? "Transaction failed on chain" : "Transaction failed (unknown reason)";
+                throw new Error(errorMsg);
+            } else if (response.status === "NOT_FOUND") {
+                await new Promise(r => setTimeout(r, 2000));
+                attempts++;
+            } else {
+                // Processing/PENDING
+                await new Promise(r => setTimeout(r, 2000));
+                attempts++;
+            }
+        } catch (err) {
+            // "Bad union switch: 4" often occurs if the SDK version is slightly behind 
+            // the RPC node's protocol (e.g., protocol 21/22 changes).
+            // Since we know the tx might have succeeded on-chain, 
+            // we catch the error and retry or check elsewhere.
+            console.warn(`Polling error for hash ${hash}:`, err.message);
+            
+            // If it's a "Bad union switch", it's usually a parsing error for metadata, 
+            // but the transaction itself might be successful.
+            if (err.message.includes("Bad union switch")) {
+                // We'll treat this as a potential success if it persists, 
+                // but for now we just wait and retry.
+                await new Promise(r => setTimeout(r, 2000));
+                attempts++;
+                continue;
+            }
+            throw err;
         }
     }
     throw new Error("Transaction polling timed out. The transaction might still succeed eventually.");

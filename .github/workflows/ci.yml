@@ -19,7 +19,9 @@ jobs:
           targets: wasm32-unknown-unknown
 
       - name: Install Soroban (Stellar) CLI
-        run: cargo install --locked stellar-cli
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/stellar/stellar-cli/main/scripts/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
       - name: Lint and Format
         working-directory: ./contract

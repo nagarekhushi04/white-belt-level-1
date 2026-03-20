@@ -6,7 +6,7 @@ use soroban_sdk::{testutils::Address as _, Address, Env};
 fn test_increment() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register_contract(None, Contract);
+    let contract_id = env.register(Contract, ());
     let client = ContractClient::new(&env, &contract_id);
 
     let user = Address::generate(&env);
@@ -28,7 +28,7 @@ fn test_increment() {
 fn test_repeat_user_not_allowed() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register_contract(None, Contract);
+    let contract_id = env.register(Contract, ());
     let client = ContractClient::new(&env, &contract_id);
 
     let user = Address::generate(&env);

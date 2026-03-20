@@ -35,6 +35,7 @@ impl Contract {
         env.storage().persistent().remove(&DataKey::Counter);
         env.storage().persistent().remove(&DataKey::LastUser);
         let topic = Symbol::new(&env, "reset");
+        #[allow(deprecated)]
         env.events().publish((topic,), (user,));
     }
 
@@ -63,6 +64,7 @@ impl Contract {
 
         let topic = Symbol::new(&env, "increment");
         let value = (user, count);
+        #[allow(deprecated)]
         env.events().publish((topic,), value);
     }
 }

@@ -1,5 +1,5 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, contracttype, symbol_short, Address, Env, Symbol, log};
+use soroban_sdk::{contract, contracterror, contractimpl, contracttype, symbol_short, Address, Env};
 
 #[contracterror]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
@@ -95,7 +95,9 @@ mod test {
     #[test]
     fn test_swap() {
         let env = Env::default();
-        let contract_id = env.register_contract(None, AMMPool);
+        env.mock_all_auths();
+
+        let contract_id = env.register(AMMPool, ());
         let client = AMMPoolClient::new(&env, &contract_id);
 
         let factory = Address::generate(&env);
@@ -107,12 +109,41 @@ mod test {
         client.add_liquidity(&user, &1000u128, &500u128);
 
         // Swap 100 A -> B
-        // output = (500 * 100) / (1000 + 100) = 50000 / 1100 = 45.45
+        // output = (500 * 100) / (1000 + 100) = 50000 / 1100 = 45
         let output = client.swap_a_to_b(&user, &100u128);
         assert_eq!(output, 45);
 
         let (res_a, res_b) = client.get_reserves();
         assert_eq!(res_a, 1100);
         assert_eq!(res_b, 500 - 45);
+    }
+
+    #[test]
+    fn test_init_once() {
+        let env = Env::default();
+        env.mock_all_auths();
+        let contract_id = env.register(AMMPool, ());
+        let client = AMMPoolClient::new(&env, &contract_id);
+
+        let factory = Address::generate(&env);
+        let asset_a = Address::generate(&env);
+        let asset_b = Address::generate(&env);
+
+        client.init(&factory, &asset_a, &asset_b);
+
+        // Second init should fail
+        let result = client.try_init(&factory, &asset_a, &asset_b);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_empty_reserves() {
+        let env = Env::default();
+        let contract_id = env.register(AMMPool, ());
+        let client = AMMPoolClient::new(&env, &contract_id);
+
+        let (a, b) = client.get_reserves();
+        assert_eq!(a, 0);
+        assert_eq!(b, 0);
     }
 }

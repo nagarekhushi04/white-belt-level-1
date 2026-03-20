@@ -1,48 +1,84 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, contracttype, symbol_short, Address, Env};
+use soroban_sdk::{contract, contractimpl, contracterror, contracttype, symbol_short, vec, Address, Env, Symbol};
 
-mod pool {
-    soroban_sdk::contractimport!(file = "../amm-pool/target/wasm32-unknown-unknown/release/amm_pool.wasm");
+#[contracterror]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
+#[repr(u32)]
+pub enum FactoryError {
+    AlreadyInitialized = 1,
+    NotInitialized = 2,
+    Unauthorized = 3,
+}
+
+#[contracttype]
+#[derive(Clone)]
+pub enum DataKey {
+    Admin,
+    Pool(Address, Address),
 }
 
 #[contract]
 pub struct AMMFactory;
 
-#[contracttype]
-pub enum DataKey {
-    Admin,
-    Pools(Address, Address), // Mapping AssetA, AssetB to PoolAddress
-}
-
 #[contractimpl]
 impl AMMFactory {
-    pub fn init(env: Env, admin: Address) {
+    /// Initialize the factory with an admin address.
+    pub fn init(env: Env, admin: Address) -> Result<(), FactoryError> {
         if env.storage().instance().has(&DataKey::Admin) {
-            panic!("Already initialized");
+            return Err(FactoryError::AlreadyInitialized);
         }
         env.storage().instance().set(&DataKey::Admin, &admin);
+        Ok(())
     }
 
-    /// Link a pool address for two assets (Level 4: Managing multiple instances).
-    pub fn set_pool(env: Env, admin: Address, asset_a: Address, asset_b: Address, pool_address: Address) {
+    /// Register a pool address for two assets.
+    pub fn set_pool(
+        env: Env,
+        admin: Address,
+        asset_a: Address,
+        asset_b: Address,
+        pool_address: Address,
+    ) -> Result<(), FactoryError> {
         admin.require_auth();
-        let stored_admin: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
+        let stored_admin: Address = env
+            .storage()
+            .instance()
+            .get(&DataKey::Admin)
+            .ok_or(FactoryError::NotInitialized)?;
         if admin != stored_admin {
-            panic!("Not authorized");
+            return Err(FactoryError::Unauthorized);
         }
 
-        env.storage().instance().set(&DataKey::Pools(asset_a.clone(), asset_b.clone()), &pool_address);
-        
+        env.storage()
+            .instance()
+            .set(&DataKey::Pool(asset_a.clone(), asset_b.clone()), &pool_address);
+
         env.events().publish(
             (symbol_short!("NEW_POOL"), asset_a, asset_b),
-            pool_address
+            pool_address,
         );
+        Ok(())
     }
 
-    /// Interact with the Pool: Fetch remote reserves (Level 4: Cross-Contract Call Pattern).
+    /// Fetch the pool address for a given asset pair.
+    pub fn get_pool(env: Env, asset_a: Address, asset_b: Address) -> Option<Address> {
+        env.storage()
+            .instance()
+            .get(&DataKey::Pool(asset_a, asset_b))
+    }
+
+    /// Cross-contract call: fetch reserves from a deployed AMMPool.
     pub fn get_pool_reserves(env: Env, pool_address: Address) -> (u128, u128) {
-        // Cross-contract call using the imported WASM trait
-        let client = pool::Client::new(&env, &pool_address);
-        client.get_reserves()
+        let res: (u128, u128) = env.invoke_contract(
+            &pool_address,
+            &Symbol::new(&env, "get_reserves"),
+            vec![&env],
+        );
+        res
+    }
+
+    /// Get the admin address.
+    pub fn get_admin(env: Env) -> Option<Address> {
+        env.storage().instance().get(&DataKey::Admin)
     }
 }

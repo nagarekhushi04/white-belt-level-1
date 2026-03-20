@@ -36,10 +36,13 @@ The application has been audited for mobile responsiveness:
 
 ---
 
-## 🔗 Deployed Smart Contract
+## 🔗 Deployed Smart Contracts (Testnet)
 
-**Soroban Counter Contract:**
-[`CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY`](https://stellar.expert/explorer/testnet/contract/CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY)
+| Contract | ID | Explorer |
+| :--- | :--- | :--- |
+| **Counter** | `CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY` | [View](https://stellar.expert/explorer/testnet/contract/CDJJ5BYJHWZBXRRX5M2XAEX5GMINIR3FDEAL4H7KRUZJXTXL44KCS2ZY) |
+| **AMM Pool** | `CAK354J3HN5ONXP6YVUBXCLGIV5IGFN233DDA3ZGR5CHKFZIRGUSDQ2R` | [View](https://stellar.expert/explorer/testnet/contract/CAK354J3HN5ONXP6YVUBXCLGIV5IGFN233DDA3ZGR5CHKFZIRGUSDQ2R) |
+| **AMM Factory** | `CBH2ZUUG6V77UR4VSAUBRZOOGMEP6ZQU7XXJWFY6E536MP5M5ZT7IXWQ` | [View](https://stellar.expert/explorer/testnet/contract/CBH2ZUUG6V77UR4VSAUBRZOOGMEP6ZQU7XXJWFY6E536MP5M5ZT7IXWQ) |
 
 ---
 

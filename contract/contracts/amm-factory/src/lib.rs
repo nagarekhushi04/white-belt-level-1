@@ -53,6 +53,7 @@ impl AMMFactory {
             .instance()
             .set(&DataKey::Pool(asset_a.clone(), asset_b.clone()), &pool_address);
 
+        #[allow(deprecated)]
         env.events().publish(
             (symbol_short!("NEW_POOL"), asset_a, asset_b),
             pool_address,

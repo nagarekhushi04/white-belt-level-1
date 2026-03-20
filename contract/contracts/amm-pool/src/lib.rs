@@ -48,6 +48,7 @@ impl AMMPool {
         env.storage().instance().set(&DataKey::ReserveA, &(reserve_a + amount_a));
         env.storage().instance().set(&DataKey::ReserveB, &(reserve_b + amount_b));
 
+        #[allow(deprecated)]
         env.events().publish(
             (symbol_short!("L_ADD"), from),
             (amount_a, amount_b)
@@ -73,6 +74,7 @@ impl AMMPool {
         env.storage().instance().set(&DataKey::ReserveA, &(res_a + amnt_in));
         env.storage().instance().set(&DataKey::ReserveB, &(res_b - amnt_out));
 
+        #[allow(deprecated)]
         env.events().publish(
             (symbol_short!("SWAP"), from),
             (amnt_in, amnt_out)

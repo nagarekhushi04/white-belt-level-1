@@ -19,10 +19,10 @@ pub enum DataKey {
 }
 
 #[contract]
-pub struct Contract;
+pub struct StellarCounter;
 
 #[contractimpl]
-impl Contract {
+impl StellarCounter {
     pub fn get_count(env: Env) -> u128 {
         env.storage().instance().get(&DataKey::Counter).unwrap_or(0u128)
     }

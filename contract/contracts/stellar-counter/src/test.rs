@@ -1,13 +1,13 @@
 #![cfg(test)]
-use super::{Contract, ContractClient};
+use super::{StellarCounter, StellarCounterClient};
 use soroban_sdk::{testutils::Address as _, Address, Env};
 
 #[test]
 fn test_increment() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(Contract, ());
-    let client = ContractClient::new(&env, &contract_id);
+    let contract_id = env.register(StellarCounter, ());
+    let client = StellarCounterClient::new(&env, &contract_id);
 
     let user = Address::generate(&env);
     
@@ -30,8 +30,8 @@ fn test_increment() {
 fn test_repeat_user_not_allowed() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(Contract, ());
-    let client = ContractClient::new(&env, &contract_id);
+    let contract_id = env.register(StellarCounter, ());
+    let client = StellarCounterClient::new(&env, &contract_id);
 
     let user = Address::generate(&env);
     client.increment(&user);

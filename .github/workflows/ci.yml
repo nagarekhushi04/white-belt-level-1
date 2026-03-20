@@ -19,7 +19,7 @@ jobs:
           targets: wasm32-unknown-unknown
 
       - name: Install Soroban (Stellar) CLI
-        run: cargo install --locked stellar-cli --features oidc-implicit-flow
+        run: cargo install --locked stellar-cli
 
       - name: Lint and Format
         working-directory: ./contract

@@ -15,8 +15,9 @@
 
 ---
 
-### 🌐 Vercel Deployment 
-[View Live Site](https://white-belt-level-1-khushinagare04-5573s-projects.vercel.app/)
+### 🌐 Live Demo & Deployment
+- **🎥 [Video Demo (Loom)](https://www.loom.com/share/3e28bd26ea6a4d6bbdbfd2563faa76f3)**
+- **🚀 [View Live Site](https://white-belt-level-1-khushinagare04-5573s-projects.vercel.app/)**
 
 
 ---

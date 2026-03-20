@@ -12,14 +12,16 @@ fn test_increment() {
     let user = Address::generate(&env);
     
     // First increment
-    client.increment(&user);
-    assert_eq!(client.get_count(), 1);
+    let count = client.increment(&user);
+    assert_eq!(count, 1u128);
+    assert_eq!(client.get_count(), 1u128);
     assert_eq!(client.get_last_user(), Some(user.clone()));
 
     // Different user increment
     let user2 = Address::generate(&env);
-    client.increment(&user2);
-    assert_eq!(client.get_count(), 2);
+    let count2 = client.increment(&user2);
+    assert_eq!(count2, 2u128);
+    assert_eq!(client.get_count(), 2u128);
     assert_eq!(client.get_last_user(), Some(user2.clone()));
 }
 

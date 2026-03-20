@@ -3,7 +3,7 @@
 [![Network: Stellar Testnet](https://img.shields.io/badge/Network-Stellar%20Testnet-blue.svg)](https://stellar.expert/explorer/testnet)
 [![Tech Stack: React + Vite](https://img.shields.io/badge/Stack-React%20%2B%20Vite-61DAFB.svg)](https://vitejs.dev/)
 [![Styling: Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS-38B2AC.svg)](https://tailwindcss.com/)
-[![Deployment: Vercel](https://img.shields.io/badge/Deployment-Vercel-black.svg)](https://white-belt-level-1-khushinagare04-5573s-projects.vercel.app/)
+[![Deployment: Vercel](https://img.shields.io/badge/Deployment-Vercel-black.svg)](https://white-belt-level-1.vercel.app/)
 
 **Stellar Pay** is a high-performance, decentralized payment application built for the **Stellar Testnet**. It provides a sleek, modern interface for managing testnet funds and interacting with on-chain Soroban smart contracts.
 
@@ -17,7 +17,7 @@
 
 ### 🌐 Live Demo & Deployment
 - **🎥 [Video Demo (Loom)](https://www.loom.com/share/3e28bd26ea6a4d6bbdbfd2563faa76f3)**
-- **🚀 [View Live Site](https://white-belt-level-1-khushinagare04-5573s-projects.vercel.app/)**
+- **🚀 [View Live Site](https://white-belt-level-1.vercel.app/)**
 
 
 ---

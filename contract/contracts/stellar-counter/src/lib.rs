@@ -1,5 +1,7 @@
 #![no_std]
-use soroban_sdk::{contract, contracterror, contractimpl, contracttype, symbol_short, Address, Env};
+use soroban_sdk::{
+    contract, contracterror, contractimpl, contracttype, symbol_short, Address, Env,
+};
 
 #[contracterror]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
@@ -24,7 +26,10 @@ pub struct StellarCounter;
 #[contractimpl]
 impl StellarCounter {
     pub fn get_count(env: Env) -> u128 {
-        env.storage().instance().get(&DataKey::Counter).unwrap_or(0u128)
+        env.storage()
+            .instance()
+            .get(&DataKey::Counter)
+            .unwrap_or(0u128)
     }
 
     pub fn get_last_user(env: Env) -> Option<Address> {
@@ -35,12 +40,10 @@ impl StellarCounter {
         user.require_auth();
         env.storage().instance().remove(&DataKey::Counter);
         env.storage().instance().remove(&DataKey::LastUser);
-        
+
         #[allow(deprecated)]
-        env.events().publish(
-            (symbol_short!("RESET"), user.clone()),
-            (user,)
-        );
+        env.events()
+            .publish((symbol_short!("RESET"), user.clone()), (user,));
     }
 
     pub fn increment(env: Env, user: Address) -> u128 {
@@ -65,10 +68,8 @@ impl StellarCounter {
         env.storage().instance().set(&DataKey::LastUser, &user);
 
         #[allow(deprecated)]
-        env.events().publish(
-            (symbol_short!("INC"), user.clone()),
-            (user, count)
-        );
+        env.events()
+            .publish((symbol_short!("INC"), user.clone()), (user, count));
         count
     }
 }

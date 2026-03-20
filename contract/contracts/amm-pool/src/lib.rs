@@ -1,5 +1,7 @@
 #![no_std]
-use soroban_sdk::{contract, contracterror, contractimpl, contracttype, symbol_short, Address, Env};
+use soroban_sdk::{
+    contract, contracterror, contractimpl, contracttype, symbol_short, Address, Env,
+};
 
 #[contracterror]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
@@ -27,7 +29,12 @@ pub struct AMMPool;
 #[contractimpl]
 impl AMMPool {
     /// Initialize the pool with Asset addresses and the Factory address.
-    pub fn init(env: Env, factory: Address, asset_a: Address, asset_b: Address) -> Result<(), Error> {
+    pub fn init(
+        env: Env,
+        factory: Address,
+        asset_a: Address,
+        asset_b: Address,
+    ) -> Result<(), Error> {
         if env.storage().instance().has(&DataKey::Factory) {
             return Err(Error::AlreadyInitialized);
         }
@@ -45,21 +52,31 @@ impl AMMPool {
         let reserve_a: u128 = env.storage().instance().get(&DataKey::ReserveA).unwrap();
         let reserve_b: u128 = env.storage().instance().get(&DataKey::ReserveB).unwrap();
 
-        env.storage().instance().set(&DataKey::ReserveA, &(reserve_a + amount_a));
-        env.storage().instance().set(&DataKey::ReserveB, &(reserve_b + amount_b));
+        env.storage()
+            .instance()
+            .set(&DataKey::ReserveA, &(reserve_a + amount_a));
+        env.storage()
+            .instance()
+            .set(&DataKey::ReserveB, &(reserve_b + amount_b));
 
         #[allow(deprecated)]
-        env.events().publish(
-            (symbol_short!("L_ADD"), from),
-            (amount_a, amount_b)
-        );
+        env.events()
+            .publish((symbol_short!("L_ADD"), from), (amount_a, amount_b));
     }
 
     /// Swap Asset A for Asset B using Constant Product (x * y = k).
     pub fn swap_a_to_b(env: Env, from: Address, amnt_in: u128) -> Result<u128, Error> {
         from.require_auth();
-        let res_a: u128 = env.storage().instance().get(&DataKey::ReserveA).ok_or(Error::NotInitialized)?;
-        let res_b: u128 = env.storage().instance().get(&DataKey::ReserveB).ok_or(Error::NotInitialized)?;
+        let res_a: u128 = env
+            .storage()
+            .instance()
+            .get(&DataKey::ReserveA)
+            .ok_or(Error::NotInitialized)?;
+        let res_b: u128 = env
+            .storage()
+            .instance()
+            .get(&DataKey::ReserveB)
+            .ok_or(Error::NotInitialized)?;
 
         // Standard AMM math: amnt_out = (res_b * amnt_in) / (res_a + amnt_in)
         if (res_a + amnt_in) == 0 {
@@ -71,20 +88,30 @@ impl AMMPool {
             return Err(Error::InsufficientReserves);
         }
 
-        env.storage().instance().set(&DataKey::ReserveA, &(res_a + amnt_in));
-        env.storage().instance().set(&DataKey::ReserveB, &(res_b - amnt_out));
+        env.storage()
+            .instance()
+            .set(&DataKey::ReserveA, &(res_a + amnt_in));
+        env.storage()
+            .instance()
+            .set(&DataKey::ReserveB, &(res_b - amnt_out));
 
         #[allow(deprecated)]
-        env.events().publish(
-            (symbol_short!("SWAP"), from),
-            (amnt_in, amnt_out)
-        );
+        env.events()
+            .publish((symbol_short!("SWAP"), from), (amnt_in, amnt_out));
         Ok(amnt_out)
     }
 
     pub fn get_reserves(env: Env) -> (u128, u128) {
-        let res_a: u128 = env.storage().instance().get(&DataKey::ReserveA).unwrap_or(0);
-        let res_b: u128 = env.storage().instance().get(&DataKey::ReserveB).unwrap_or(0);
+        let res_a: u128 = env
+            .storage()
+            .instance()
+            .get(&DataKey::ReserveA)
+            .unwrap_or(0);
+        let res_b: u128 = env
+            .storage()
+            .instance()
+            .get(&DataKey::ReserveB)
+            .unwrap_or(0);
         (res_a, res_b)
     }
 }

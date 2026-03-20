@@ -1,5 +1,7 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, contracterror, contracttype, symbol_short, vec, Address, Env, Symbol};
+use soroban_sdk::{
+    contract, contracterror, contractimpl, contracttype, symbol_short, vec, Address, Env, Symbol,
+};
 
 #[contracterror]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
@@ -49,15 +51,14 @@ impl AMMFactory {
             return Err(FactoryError::Unauthorized);
         }
 
-        env.storage()
-            .instance()
-            .set(&DataKey::Pool(asset_a.clone(), asset_b.clone()), &pool_address);
+        env.storage().instance().set(
+            &DataKey::Pool(asset_a.clone(), asset_b.clone()),
+            &pool_address,
+        );
 
         #[allow(deprecated)]
-        env.events().publish(
-            (symbol_short!("NEW_POOL"), asset_a, asset_b),
-            pool_address,
-        );
+        env.events()
+            .publish((symbol_short!("NEW_POOL"), asset_a, asset_b), pool_address);
         Ok(())
     }
 

@@ -10,7 +10,7 @@ fn test_increment() {
     let client = StellarCounterClient::new(&env, &contract_id);
 
     let user = Address::generate(&env);
-    
+
     // First increment
     let count = client.increment(&user);
     assert_eq!(count, 1u128);

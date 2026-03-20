@@ -249,7 +249,9 @@ export default function App() {
 
                     <SwapDashboard 
                         walletAddress={publicKey} 
-                        isConnected={!!publicKey} 
+                        isConnected={!!publicKey}
+                        signTx={signTx}
+                        refreshBalance={refreshBalance}
                     />
                 </div>
             </main>
